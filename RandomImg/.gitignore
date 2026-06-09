@@ -1,0 +1,27 @@
+# Java compiled output
+*.class
+*.jar
+
+# Build folders
+/out/
+/bin/
+/build/
+/target/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.swp
+
+# Java package / runtime junk
+hs_err_pid*
+replay_pid*
+
+#VS Code
+.vscode/
