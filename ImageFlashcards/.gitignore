@@ -1,12 +1,14 @@
 # Java compiled output
 *.class
 *.jar
+*.exe
 
 # Build folders
 /out/
 /bin/
 /build/
 /target/
+/dist/
 
 # OS generated files
 .DS_Store
