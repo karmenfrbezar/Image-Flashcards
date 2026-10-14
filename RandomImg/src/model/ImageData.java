@@ -1,31 +1,33 @@
 package model;
 
 import java.nio.file.Path;
+import java.util.Objects;
 
 public class ImageData {
-  private Path imagePath;
-  private String imageName;
 
-  public ImageData(Path imagePath) {
-    this.imagePath = imagePath;
-    
-    String fileName = imagePath.getFileName().toString();
+    private final Path imagePath;
+    private final String imageName;
 
-    int dotIndex = fileName.lastIndexOf('.');
-    if (dotIndex > 0) {
-      this.imageName = fileName.substring(0, dotIndex);
-    } else {
-      this.imageName = fileName;
+    public ImageData(Path imagePath) {
+        this.imagePath = Objects.requireNonNull(
+            imagePath, "Putanja slike ne smije biti null"
+        );
+
+        String fileName = imagePath.getFileName().toString();
+
+        int dotIndex = fileName.lastIndexOf('.');
+        String name = dotIndex > 0
+            ? fileName.substring(0, dotIndex)
+            : fileName;
+
+        this.imageName = name.replace('_', ' ');
     }
 
-    this.imageName = this.imageName.replace("_", " "); // ako se koriste rijeci_odvojene_donjom_crtom
-  }
+    public Path getImagePath() {
+        return imagePath;
+    }
 
-  public Path getImagePath() {
-    return imagePath;
-  }
-
-  public String getImageName() {
-    return imageName;
-  }
+    public String getImageName() {
+        return imageName;
+    }
 }

@@ -6,44 +6,59 @@ import java.awt.image.BufferedImage;
 
 public class ImagePanel extends JPanel {
 
-  private BufferedImage image;
+    private BufferedImage image;
 
-  public void setImage(BufferedImage image) {
-    this.image = image;
-    repaint();
-  }
+    public void setImage(BufferedImage image) {
+        this.image = image;
+        repaint();
+    }
 
-  @Override
-  protected void paintComponent(Graphics g) {
-    super.paintComponent(g);
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
 
-    if (image == null) return;
+        if (image == null) {
+            return;
+        }
 
-    int panelWidth = getWidth();
-    int panelHeight = getHeight();
+        int panelWidth = getWidth();
+        int panelHeight = getHeight();
 
-    int imgWidth = image.getWidth();
-    int imgHeight = image.getHeight();
+        if (panelWidth <= 0 || panelHeight <= 0) {
+            return;
+        }
 
-    double widthRatio = (double) panelWidth / imgWidth;
-    double heightRatio = (double) panelHeight / imgHeight;
-    double scale = Math.min(widthRatio, heightRatio);
+        int imgWidth = image.getWidth();
+        int imgHeight = image.getHeight();
 
-    int newWidth = (int) (imgWidth * scale);
-    int newHeight = (int) (imgHeight * scale);
+        if (imgWidth <= 0 || imgHeight <= 0) {
+            return;
+        }
 
-    int x = (panelWidth - newWidth) / 2;
-    int y = (panelHeight - newHeight) / 2;
+        double scale = Math.min(
+            (double) panelWidth / imgWidth,
+            (double) panelHeight / imgHeight
+        );
 
-    Graphics2D g2d = (Graphics2D) g;
-    g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-            RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-    
-    g2d.drawImage(image, x, y, newWidth, newHeight, null);
-    //nadodano
-    g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
-    g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+        int newWidth = Math.max(1, (int) (imgWidth * scale));
+        int newHeight = Math.max(1, (int) (imgHeight * scale));
 
-  }
-  
+        int x = (panelWidth - newWidth) / 2;
+        int y = (panelHeight - newHeight) / 2;
+
+        Graphics2D g2d = (Graphics2D) g.create();
+
+        try {
+            g2d.setRenderingHint(
+                RenderingHints.KEY_INTERPOLATION,
+                RenderingHints.VALUE_INTERPOLATION_BICUBIC
+            );
+
+            g2d.drawImage(
+                image, x, y, newWidth, newHeight, null
+            );
+        } finally {
+            g2d.dispose();
+        }
+    }
 }

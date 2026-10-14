@@ -3,16 +3,21 @@ package gui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.net.URL;
 
 public class BaseFrame extends JFrame {
 
     public BaseFrame() {
-        Image icon = Toolkit.getDefaultToolkit().getImage(
-                getClass().getResource("/resources/logo_rim.PNG")
-        );
-        setIconImage(icon);
+        URL iconUrl = getClass().getResource("/logo_rim.PNG");
 
-        setupKeyBindings(); 
+        if (iconUrl != null) {
+            Image icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
+            setIconImage(icon);
+        } else {
+            System.err.println("Logo not found: /logo_rim.PNG");
+        }
+
+        setupKeyBindings();
     }
 
     private void setupKeyBindings() {
@@ -20,8 +25,7 @@ public class BaseFrame extends JFrame {
 
         InputMap inputMap =
                 rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        ActionMap actionMap =
-                rootPane.getActionMap();
+        ActionMap actionMap = rootPane.getActionMap();
 
         inputMap.put(
                 KeyStroke.getKeyStroke("control Q"),

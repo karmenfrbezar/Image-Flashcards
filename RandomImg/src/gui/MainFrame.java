@@ -88,22 +88,52 @@ public class MainFrame extends BaseFrame {
     }
 
     private void nextImage() {
-        currentImage = manager.getRandomImage();
+        
+        currentImage = null;
+        answerLabel.setText(" ");
+        imagePanel.setImage(null);
 
-        if (currentImage == null) {
-            JOptionPane.showMessageDialog(this, "No images in this folder!");
-            imagePanel.setImage(null);
+        ImageData selectedImage = manager.getRandomImage();
+
+        if (selectedImage == null) {
+            JOptionPane.showMessageDialog(
+                this,
+                "No supported images were found in this folder.",
+                "No images",
+                JOptionPane.INFORMATION_MESSAGE
+            );
             return;
         }
 
         try {
-            BufferedImage img = ImageIO.read(currentImage.getImagePath().toFile());
+            BufferedImage img =
+                ImageIO.read(selectedImage.getImagePath().toFile());
+
+            if (img == null) {
+                JOptionPane.showMessageDialog(
+                    this,
+                    "The selected file is not a supported image:\n"
+                        + selectedImage.getImagePath().getFileName(),
+                    "Invalid image",
+                    JOptionPane.WARNING_MESSAGE
+                );
+                return;
+            }
+
+            currentImage = selectedImage;
             imagePanel.setImage(img);
+
         } catch (IOException e) {
+            JOptionPane.showMessageDialog(
+                this,
+                "Could not read the selected image:\n"
+                    + selectedImage.getImagePath().getFileName(),
+                "Image loading error",
+                JOptionPane.ERROR_MESSAGE
+            );
+
             e.printStackTrace();
         }
-
-        answerLabel.setText(" ");
     }
 
     private void showAnswer() {
